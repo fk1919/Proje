@@ -5545,8 +5545,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 155ae6d3f9ec7e045b2fcb243a35dd31, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  shootingPoint: {fileID: 0}
-  weldingEffect: {fileID: 0}
 --- !u!114 &607137748
 MonoBehaviour:
   m_ObjectHideFlags: 0
