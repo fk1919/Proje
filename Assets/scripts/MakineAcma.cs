@@ -14,12 +14,13 @@ public class MakineAcma : MonoBehaviour
     private bool isPressed = false;
     private bool wasButtonPressedLastFrame = false;
 
-    // Inspector’da görünürlüðü kontrol etmek için
-    public bool showZARYDKAFields = true;
+    // Inspector’dan ayarlamak için GameObject referanslarý
+    public GameObject ZARYDKA4;
+    public GameObject ZARYDKA5;
+    public GameObject ZARYDKA6;
 
-    public bool ZARYDKA4_LOW = true;
-    public bool ZARYDKA5_LOW = true;
-    public bool ZARYDKA6_LOW = true;
+    // Görünürlük kontrolü
+    public bool showZARYDKAFields = true;
 
     void Start()
     {
@@ -34,17 +35,26 @@ public class MakineAcma : MonoBehaviour
     {
         if (triggerVisual == null) return;
 
+        // Oculus A tuþuna basýlýyor mu kontrol et
         bool isAButtonPressedNow = OVRInput.Get(OVRInput.Button.One, OVRInput.Controller.RTouch);
 
+        // Tuþ bu frame’de ilk defa basýldýysa
         if (isAButtonPressedNow && !wasButtonPressedLastFrame)
         {
             isPressed = !isPressed;
             showZARYDKAFields = !showZARYDKAFields; // Toggle görünürlük
         }
 
+        // Düðmenin konum ve rotasyonunu güncelle
         triggerVisual.localPosition = isPressed ? pressedLocalPosition : initialLocalPosition;
         triggerVisual.localRotation = isPressed ? pressedLocalRotation : initialLocalRotation;
 
+        // ZARYDKA nesnelerinin görünürlüðünü ayarla
+        if (ZARYDKA4 != null) ZARYDKA4.SetActive(showZARYDKAFields);
+        if (ZARYDKA5 != null) ZARYDKA5.SetActive(showZARYDKAFields);
+        if (ZARYDKA6 != null) ZARYDKA6.SetActive(showZARYDKAFields);
+
+        // Bu frame'deki tuþ durumu, bir sonraki frame için saklanýr
         wasButtonPressedLastFrame = isAButtonPressedNow;
     }
 }
