@@ -11228,6 +11228,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: -8544140755793663491, guid: c84e3c04cdfa1f04ba66c665e8fc4158,
         type: 3}
+      propertyPath: m_CastShadows
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: -8544140755793663491, guid: c84e3c04cdfa1f04ba66c665e8fc4158,
+        type: 3}
       propertyPath: m_Materials.Array.data[0]
       value: 
       objectReference: {fileID: 2100000, guid: b64820999c5a6b14182a93982242cc2c, type: 2}
@@ -11441,6 +11446,26 @@ PrefabInstance:
       propertyPath: m_Materials.Array.data[0]
       value: 
       objectReference: {fileID: 2100000, guid: 444a15be2015db242a1633bd42e278f9, type: 2}
+    - target: {fileID: 7442754804885561780, guid: c84e3c04cdfa1f04ba66c665e8fc4158,
+        type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7442754804885561780, guid: c84e3c04cdfa1f04ba66c665e8fc4158,
+        type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7442754804885561780, guid: c84e3c04cdfa1f04ba66c665e8fc4158,
+        type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7442754804885561780, guid: c84e3c04cdfa1f04ba66c665e8fc4158,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 7829676507516741464, guid: c84e3c04cdfa1f04ba66c665e8fc4158,
         type: 3}
       propertyPath: m_Materials.Array.data[0]
@@ -11515,8 +11540,12 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   triggerVisual: {fileID: 1742641208}
-  pressedLocalPosition: {x: 0, y: 0, z: 0}
-  activationDistance: 0.5
+  pressedLocalPosition: {x: 0.1724, y: 0.5667, z: 0.23822}
+  pressedLocalRotation: {x: 0, y: 0, z: 1, w: -0.00000004371139}
+  showZARYDKAFields: 1
+  ZARYDKA4_LOW: 1
+  ZARYDKA5_LOW: 1
+  ZARYDKA6_LOW: 1
 --- !u!1 &1756965868 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 5570513018946719955, guid: ce864648c5c943a42982cbce0f60fd9a,

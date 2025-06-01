@@ -3,41 +3,48 @@ using Oculus;
 
 public class MakineAcma : MonoBehaviour
 {
-    public Transform triggerVisual;  // Tetik parçasý
-    public Vector3 pressedLocalPosition = new Vector3(0, -0.005f, 0); // Ýçeri gireceði pozisyon
+    public Transform triggerVisual;
+
+    public Vector3 pressedLocalPosition = new Vector3(0, -0.005f, 0);
+    public Quaternion pressedLocalRotation = Quaternion.Euler(0, 0, 0);
 
     private Vector3 initialLocalPosition;
-    private bool isPressed = false;  // Toggle durumu
-    public float activationDistance = 0.5f; // Etkileþim mesafesi
+    private Quaternion initialLocalRotation;
+
+    private bool isPressed = false;
+    private bool wasButtonPressedLastFrame = false;
+
+    // Inspector’da görünürlüðü kontrol etmek için
+    public bool showZARYDKAFields = true;
+
+    public bool ZARYDKA4_LOW = true;
+    public bool ZARYDKA5_LOW = true;
+    public bool ZARYDKA6_LOW = true;
 
     void Start()
     {
         if (triggerVisual != null)
+        {
             initialLocalPosition = triggerVisual.localPosition;
+            initialLocalRotation = triggerVisual.localRotation;
+        }
     }
 
     void Update()
     {
         if (triggerVisual == null) return;
 
-        // Sað kontrolcünün dünya konumunu al
-        Vector3 rightControllerPosition = OVRInput.GetLocalControllerPosition(OVRInput.Controller.RTouch);
+        bool isAButtonPressedNow = OVRInput.Get(OVRInput.Button.One, OVRInput.Controller.RTouch);
 
-        // Eðer rig hareketliyse, local pozisyonu dünya pozisyonuna dönüþtürmen gerekebilir.
-        // Bu durumda pozisyon doðru görünmüyorsa OVRCameraRig'in Transform'u üzerinden çevir:
-        // Vector3 worldControllerPosition = cameraRigTransform.TransformPoint(rightControllerPosition);
-
-        float distance = Vector3.Distance(rightControllerPosition, transform.position);
-
-        if (distance <= activationDistance)
+        if (isAButtonPressedNow && !wasButtonPressedLastFrame)
         {
-            if (OVRInput.GetDown(OVRInput.Button.One, OVRInput.Controller.RTouch))
-            {
-                isPressed = !isPressed;
-            }
+            isPressed = !isPressed;
+            showZARYDKAFields = !showZARYDKAFields; // Toggle görünürlük
         }
 
-        // Tetik konumunu güncelle
         triggerVisual.localPosition = isPressed ? pressedLocalPosition : initialLocalPosition;
+        triggerVisual.localRotation = isPressed ? pressedLocalRotation : initialLocalRotation;
+
+        wasButtonPressedLastFrame = isAButtonPressedNow;
     }
 }
