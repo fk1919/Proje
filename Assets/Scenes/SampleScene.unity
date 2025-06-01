@@ -133,32 +133,32 @@ PrefabInstance:
     - target: {fileID: -8679921383154817045, guid: 817d8420290fdd3489069d24048f7a4d,
         type: 3}
       propertyPath: m_LocalScale.x
-      value: 0.2
+      value: 0.125
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 817d8420290fdd3489069d24048f7a4d,
         type: 3}
       propertyPath: m_LocalScale.y
-      value: 0.2
+      value: 0.125
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 817d8420290fdd3489069d24048f7a4d,
         type: 3}
       propertyPath: m_LocalScale.z
-      value: 0.2
+      value: 0.125
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 817d8420290fdd3489069d24048f7a4d,
         type: 3}
       propertyPath: m_LocalPosition.x
-      value: 5.867
+      value: 6.823
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 817d8420290fdd3489069d24048f7a4d,
         type: 3}
       propertyPath: m_LocalPosition.y
-      value: 1.383
+      value: 0.644
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 817d8420290fdd3489069d24048f7a4d,
         type: 3}
       propertyPath: m_LocalPosition.z
-      value: 0.735
+      value: 1.178
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 817d8420290fdd3489069d24048f7a4d,
         type: 3}
@@ -1622,17 +1622,17 @@ PrefabInstance:
     - target: {fileID: -8679921383154817045, guid: cb9e2449f5f840149aa9fd4be3d2f3d2,
         type: 3}
       propertyPath: m_LocalScale.x
-      value: 1.75
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: cb9e2449f5f840149aa9fd4be3d2f3d2,
         type: 3}
       propertyPath: m_LocalScale.y
-      value: 1.75
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: cb9e2449f5f840149aa9fd4be3d2f3d2,
         type: 3}
       propertyPath: m_LocalScale.z
-      value: 1.75
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: cb9e2449f5f840149aa9fd4be3d2f3d2,
         type: 3}
@@ -10998,12 +10998,12 @@ PrefabInstance:
     - target: {fileID: -8679921383154817045, guid: c84e3c04cdfa1f04ba66c665e8fc4158,
         type: 3}
       propertyPath: m_LocalPosition.x
-      value: 4.723
+      value: 6.23
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: c84e3c04cdfa1f04ba66c665e8fc4158,
         type: 3}
       propertyPath: m_LocalPosition.y
-      value: -0.060000062
+      value: -0.054
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: c84e3c04cdfa1f04ba66c665e8fc4158,
         type: 3}
@@ -11586,14 +11586,14 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1759885996}
   serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 1.01, z: 0.89}
+  m_LocalRotation: {x: 0, y: 1, z: 0, w: 0}
+  m_LocalPosition: {x: 7.15, y: 0.353, z: 2.447}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 373544865}
   m_Father: {fileID: 0}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 180, z: 0}
 --- !u!1 &1784999219
 GameObject:
   m_ObjectHideFlags: 0
@@ -12702,8 +12702,8 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2012981871}
   serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 1, z: 0, w: 0}
-  m_LocalPosition: {x: 6.415, y: 0.422, z: 1.118}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -12711,7 +12711,7 @@ Transform:
   - {fileID: 378249792}
   - {fileID: 2025994328}
   m_Father: {fileID: 373544865}
-  m_LocalEulerAnglesHint: {x: 0, y: 180, z: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &2025994327 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 919132149155446097, guid: 6c41da3ea7f85e94fa13125228d388ae,
