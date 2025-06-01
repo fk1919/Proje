@@ -12,7 +12,7 @@ public class MaskAttachDetector : MonoBehaviour
     {
         if (isAttached) return;
 
-        if (other.CompareTag("PlayerHead"))
+        if (other.CompareTag("MainCamera"))
         {
             isAttached = true;
 
