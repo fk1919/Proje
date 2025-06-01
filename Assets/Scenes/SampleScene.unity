@@ -26006,7 +26006,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_LocalRotation.w
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
       value: 1
+=======
+      value: -0.08715578
+>>>>>>> Stashed changes
 =======
       value: -0.08715578
 >>>>>>> Stashed changes
@@ -26020,7 +26024,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_LocalRotation.y
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
       value: 0
+=======
+      value: 0.9961947
+>>>>>>> Stashed changes
 =======
       value: 0.9961947
 >>>>>>> Stashed changes
@@ -26039,7 +26047,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.y
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
       value: 0
+=======
+      value: 190
+>>>>>>> Stashed changes
 =======
       value: 190
 >>>>>>> Stashed changes
