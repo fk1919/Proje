@@ -7662,6 +7662,11 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 1173746418359716693, guid: fe862274105fe5642ac6b1f6cc3d44fa,
         type: 3}
+      propertyPath: headTarget
+      value: 
+      objectReference: {fileID: 1859862461}
+    - target: {fileID: 1173746418359716693, guid: fe862274105fe5642ac6b1f6cc3d44fa,
+        type: 3}
       propertyPath: blackTintCanvas
       value: 
       objectReference: {fileID: 1190287631}
