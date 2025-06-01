@@ -14,12 +14,17 @@ public class MakineAcma : MonoBehaviour
     private bool isPressed = false;
     private bool wasButtonPressedLastFrame = false;
 
-    // Inspector’da görünürlüðü kontrol etmek için
+    // Görsel nesneler
+    public GameObject ZARYDKA4;
+    public GameObject ZARYDKA5;
+    public GameObject ZARYDKA6;
+
     public bool showZARYDKAFields = true;
 
-    public bool ZARYDKA4_LOW = true;
-    public bool ZARYDKA5_LOW = true;
-    public bool ZARYDKA6_LOW = true;
+    // Renk kontrolü
+    private Renderer triggerRenderer;
+    private Color originalColor;
+    public Color pressedColor = Color.green;
 
     void Start()
     {
@@ -27,6 +32,12 @@ public class MakineAcma : MonoBehaviour
         {
             initialLocalPosition = triggerVisual.localPosition;
             initialLocalRotation = triggerVisual.localRotation;
+
+            triggerRenderer = triggerVisual.GetComponent<Renderer>();
+            if (triggerRenderer != null)
+            {
+                originalColor = triggerRenderer.material.color;
+            }
         }
     }
 
@@ -39,11 +50,23 @@ public class MakineAcma : MonoBehaviour
         if (isAButtonPressedNow && !wasButtonPressedLastFrame)
         {
             isPressed = !isPressed;
-            showZARYDKAFields = !showZARYDKAFields; // Toggle görünürlük
+            showZARYDKAFields = !showZARYDKAFields;
+
+            // Rengi deðiþtir
+            if (triggerRenderer != null)
+            {
+                triggerRenderer.material.color = isPressed ? pressedColor : originalColor;
+            }
         }
 
+        // Düðmenin pozisyon ve rotasyonunu güncelle
         triggerVisual.localPosition = isPressed ? pressedLocalPosition : initialLocalPosition;
         triggerVisual.localRotation = isPressed ? pressedLocalRotation : initialLocalRotation;
+
+        // ZARYDKA nesnelerini aktif/pasif yap
+        if (ZARYDKA4 != null) ZARYDKA4.SetActive(showZARYDKAFields);
+        if (ZARYDKA5 != null) ZARYDKA5.SetActive(showZARYDKAFields);
+        if (ZARYDKA6 != null) ZARYDKA6.SetActive(showZARYDKAFields);
 
         wasButtonPressedLastFrame = isAButtonPressedNow;
     }

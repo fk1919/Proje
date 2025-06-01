@@ -688,6 +688,12 @@ Transform:
   - {fileID: 1446361541}
   m_Father: {fileID: 1922189720}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &552043475 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: -2765195624778711462, guid: c84e3c04cdfa1f04ba66c665e8fc4158,
+    type: 3}
+  m_PrefabInstance: {fileID: 1742641206}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &607137743
 GameObject:
   m_ObjectHideFlags: 0
@@ -6317,6 +6323,12 @@ Transform:
   m_Children: []
   m_Father: {fileID: 493118312}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &1467901347 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: -4283176846880911204, guid: c84e3c04cdfa1f04ba66c665e8fc4158,
+    type: 3}
+  m_PrefabInstance: {fileID: 1742641206}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &1485842488
 GameObject:
   m_ObjectHideFlags: 0
@@ -6348,6 +6360,12 @@ Transform:
   m_Children: []
   m_Father: {fileID: 1922189720}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &1536288056 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 4950142458296588547, guid: c84e3c04cdfa1f04ba66c665e8fc4158,
+    type: 3}
+  m_PrefabInstance: {fileID: 1742641206}
+  m_PrefabAsset: {fileID: 0}
 --- !u!4 &1575250653 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: -2336608935928351150, guid: 6c41da3ea7f85e94fa13125228d388ae,
@@ -6416,7 +6434,7 @@ PrefabInstance:
     - target: {fileID: -8679921383154817045, guid: c84e3c04cdfa1f04ba66c665e8fc4158,
         type: 3}
       propertyPath: m_LocalRotation.w
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: c84e3c04cdfa1f04ba66c665e8fc4158,
         type: 3}
@@ -6426,7 +6444,7 @@ PrefabInstance:
     - target: {fileID: -8679921383154817045, guid: c84e3c04cdfa1f04ba66c665e8fc4158,
         type: 3}
       propertyPath: m_LocalRotation.y
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: c84e3c04cdfa1f04ba66c665e8fc4158,
         type: 3}
@@ -6441,7 +6459,7 @@ PrefabInstance:
     - target: {fileID: -8679921383154817045, guid: c84e3c04cdfa1f04ba66c665e8fc4158,
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.y
-      value: 180
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: c84e3c04cdfa1f04ba66c665e8fc4158,
         type: 3}
@@ -6764,10 +6782,11 @@ MonoBehaviour:
   triggerVisual: {fileID: 1742641208}
   pressedLocalPosition: {x: 0.1724, y: 0.5667, z: 0.23822}
   pressedLocalRotation: {x: 0, y: 0, z: 1, w: -0.00000004371139}
+  ZARYDKA4: {fileID: 552043475}
+  ZARYDKA5: {fileID: 1536288056}
+  ZARYDKA6: {fileID: 1467901347}
   showZARYDKAFields: 1
-  ZARYDKA4_LOW: 1
-  ZARYDKA5_LOW: 1
-  ZARYDKA6_LOW: 1
+  pressedColor: {r: 0, g: 1, b: 0, a: 1}
 --- !u!1 &1759885996
 GameObject:
   m_ObjectHideFlags: 0
@@ -7404,7 +7423,7 @@ PrefabInstance:
     - target: {fileID: 6392252493495187661, guid: fe862274105fe5642ac6b1f6cc3d44fa,
         type: 3}
       propertyPath: m_LocalPosition.z
-      value: 1.178
+      value: 1.26
       objectReference: {fileID: 0}
     - target: {fileID: 6392252493495187661, guid: fe862274105fe5642ac6b1f6cc3d44fa,
         type: 3}
