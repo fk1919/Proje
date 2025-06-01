@@ -6434,7 +6434,7 @@ PrefabInstance:
     - target: {fileID: -8679921383154817045, guid: c84e3c04cdfa1f04ba66c665e8fc4158,
         type: 3}
       propertyPath: m_LocalRotation.w
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: c84e3c04cdfa1f04ba66c665e8fc4158,
         type: 3}
@@ -6444,7 +6444,7 @@ PrefabInstance:
     - target: {fileID: -8679921383154817045, guid: c84e3c04cdfa1f04ba66c665e8fc4158,
         type: 3}
       propertyPath: m_LocalRotation.y
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: c84e3c04cdfa1f04ba66c665e8fc4158,
         type: 3}
@@ -6459,7 +6459,7 @@ PrefabInstance:
     - target: {fileID: -8679921383154817045, guid: c84e3c04cdfa1f04ba66c665e8fc4158,
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.y
-      value: 180
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: c84e3c04cdfa1f04ba66c665e8fc4158,
         type: 3}
@@ -6786,6 +6786,7 @@ MonoBehaviour:
   ZARYDKA5: {fileID: 1536288056}
   ZARYDKA6: {fileID: 1467901347}
   showZARYDKAFields: 1
+  pressedColor: {r: 0, g: 1, b: 0, a: 1}
 --- !u!1 &1759885996
 GameObject:
   m_ObjectHideFlags: 0

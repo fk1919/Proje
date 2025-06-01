@@ -14,13 +14,17 @@ public class MakineAcma : MonoBehaviour
     private bool isPressed = false;
     private bool wasButtonPressedLastFrame = false;
 
-    // Inspector’dan ayarlamak için GameObject referanslarý
+    // Görsel nesneler
     public GameObject ZARYDKA4;
     public GameObject ZARYDKA5;
     public GameObject ZARYDKA6;
 
-    // Görünürlük kontrolü
     public bool showZARYDKAFields = true;
+
+    // Renk kontrolü
+    private Renderer triggerRenderer;
+    private Color originalColor;
+    public Color pressedColor = Color.green;
 
     void Start()
     {
@@ -28,6 +32,12 @@ public class MakineAcma : MonoBehaviour
         {
             initialLocalPosition = triggerVisual.localPosition;
             initialLocalRotation = triggerVisual.localRotation;
+
+            triggerRenderer = triggerVisual.GetComponent<Renderer>();
+            if (triggerRenderer != null)
+            {
+                originalColor = triggerRenderer.material.color;
+            }
         }
     }
 
@@ -35,26 +45,29 @@ public class MakineAcma : MonoBehaviour
     {
         if (triggerVisual == null) return;
 
-        // Oculus A tuþuna basýlýyor mu kontrol et
         bool isAButtonPressedNow = OVRInput.Get(OVRInput.Button.One, OVRInput.Controller.RTouch);
 
-        // Tuþ bu frame’de ilk defa basýldýysa
         if (isAButtonPressedNow && !wasButtonPressedLastFrame)
         {
             isPressed = !isPressed;
-            showZARYDKAFields = !showZARYDKAFields; // Toggle görünürlük
+            showZARYDKAFields = !showZARYDKAFields;
+
+            // Rengi deðiþtir
+            if (triggerRenderer != null)
+            {
+                triggerRenderer.material.color = isPressed ? pressedColor : originalColor;
+            }
         }
 
-        // Düðmenin konum ve rotasyonunu güncelle
+        // Düðmenin pozisyon ve rotasyonunu güncelle
         triggerVisual.localPosition = isPressed ? pressedLocalPosition : initialLocalPosition;
         triggerVisual.localRotation = isPressed ? pressedLocalRotation : initialLocalRotation;
 
-        // ZARYDKA nesnelerinin görünürlüðünü ayarla
+        // ZARYDKA nesnelerini aktif/pasif yap
         if (ZARYDKA4 != null) ZARYDKA4.SetActive(showZARYDKAFields);
         if (ZARYDKA5 != null) ZARYDKA5.SetActive(showZARYDKAFields);
         if (ZARYDKA6 != null) ZARYDKA6.SetActive(showZARYDKAFields);
 
-        // Bu frame'deki tuþ durumu, bir sonraki frame için saklanýr
         wasButtonPressedLastFrame = isAButtonPressedNow;
     }
 }
