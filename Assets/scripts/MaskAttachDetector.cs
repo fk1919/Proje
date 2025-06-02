@@ -5,7 +5,6 @@ using UnityEngine.XR.Interaction.Toolkit;
 public class MaskAttachDetector : MonoBehaviour
 {
     public GameObject maskModel; // Görsel kýsmý
-    public Image blackTintImage;
     public string triggerTag = "MaskTrigger";
     public Transform headTarget; // CenterEyeAnchor gibi
     private XRGrabInteractable grabInteractable;
@@ -40,13 +39,7 @@ public class MaskAttachDetector : MonoBehaviour
             if (headTarget != null)
                 transform.SetParent(headTarget, true); // worldPosition korunsun
 
-            // Ekraný karart (þimdilik opsiyonel)
-            if (blackTintImage != null)
-            {
-                Color color = blackTintImage.color;
-                color.a = 0.8f;
-                blackTintImage.color = color;
-            }
+     
         }
     }
 
