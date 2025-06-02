@@ -2,30 +2,23 @@ using UnityEngine;
 
 public class MaskAttachDetector : MonoBehaviour
 {
-    public GameObject maskModel;
-    public Transform headTarget; // VR kafanýn hedefi
-    public Canvas blackTintCanvas;
+    public GameObject maskModel;         // Maskeyi temsil eden 3D model
+    public GameObject blackTintCanvas;   // Ekraný karartan canvas panel
+    public string triggerTag = "MaskTrigger";
 
-    private bool isAttached = false;
-
-    private void OnTriggerEnter(Collider other)
+    void OnTriggerEnter(Collider other)
     {
-        if (isAttached) return;
-
-        if (other.CompareTag("MainCamera"))
+        if (other.CompareTag(triggerTag))
         {
-            AttachMask();
+            Debug.Log("Maske kafaya takýldý!");
+
+            // Maskeyi görünmez yap
+            if (maskModel != null)
+                maskModel.SetActive(false);
+
+            // Canvas’ý aktif et
+            if (blackTintCanvas != null)
+                blackTintCanvas.SetActive(true);
         }
-    }
-
-    void AttachMask()
-    {
-        isAttached = true;
-
-        if (maskModel != null)
-            maskModel.SetActive(false); // maskeyi görünmez yap
-
-        if (blackTintCanvas != null)
-            blackTintCanvas.enabled = true; // ekraný karart
     }
 }

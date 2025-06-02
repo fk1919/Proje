@@ -6,6 +6,7 @@ TagManager:
   tags:
   - Mask
   - Table
+  - MaskTrigger
   layers:
   - Default
   - TransparentFX
