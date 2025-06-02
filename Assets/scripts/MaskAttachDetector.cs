@@ -44,7 +44,7 @@ public class MaskAttachDetector : MonoBehaviour
             if (blackTintImage != null)
             {
                 Color color = blackTintImage.color;
-                color.a = 0.5f;
+                color.a = 0.8f;
                 blackTintImage.color = color;
             }
         }
