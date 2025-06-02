@@ -4400,7 +4400,7 @@ Transform:
   m_GameObject: {fileID: 410087039}
   serializedVersion: 2
   m_LocalRotation: {x: 0.40821788, y: -0.23456968, z: 0.10938163, w: 0.8754261}
-  m_LocalPosition: {x: 7.16, y: 2.08, z: -0.11}
+  m_LocalPosition: {x: 9.227, y: 2.39, z: 1.191}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -5534,6 +5534,9 @@ MonoBehaviour:
   maskModel: {fileID: 527767555}
   triggerTag: MaskTrigger
   headTarget: {fileID: 1859862461}
+  directionalLight: {fileID: 410087040}
+  attachedLightColor: {r: 0.7264151, g: 0.7264151, b: 0.7264151, a: 1}
+  attachedIntensity: 0.95
 --- !u!114 &527767563
 MonoBehaviour:
   m_ObjectHideFlags: 0
