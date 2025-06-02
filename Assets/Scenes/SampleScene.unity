@@ -5454,7 +5454,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: d07053ba247cf7d4c98c84f64f0a5f93, type: 2}
+  - {fileID: 0}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -5483,7 +5483,7 @@ MeshFilter:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 527767555}
-  m_Mesh: {fileID: 7384567162086786122, guid: 817d8420290fdd3489069d24048f7a4d, type: 3}
+  m_Mesh: {fileID: 0}
 --- !u!114 &527767560
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -5531,11 +5531,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: dd9ac0e84af9b73458b33cb636aa279c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  maskModel: {fileID: 527767555}
+  maskModel: {fileID: 274559125}
   triggerTag: MaskTrigger
   headTarget: {fileID: 1859862461}
   directionalLight: {fileID: 410087040}
-  attachedLightColor: {r: 0.7264151, g: 0.7264151, b: 0.7264151, a: 1}
+  attachedLightColor: {r: 0.5, g: 0.5, b: 0.5, a: 1}
   attachedIntensity: 0.95
 --- !u!114 &527767563
 MonoBehaviour:
@@ -14532,6 +14532,89 @@ Transform:
   m_Children: []
   m_Father: {fileID: 981663936}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &877229275
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 877229276}
+  - component: {fileID: 877229278}
+  - component: {fileID: 877229277}
+  m_Layer: 0
+  m_Name: GameObject
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &877229276
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 877229275}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0.5, y: 0.5, z: 0.5, w: -0.5}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1352292124}
+  m_LocalEulerAnglesHint: {x: -90, y: 270, z: 0}
+--- !u!23 &877229277
+MeshRenderer:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 877229275}
+  m_Enabled: 1
+  m_CastShadows: 1
+  m_ReceiveShadows: 1
+  m_DynamicOccludee: 1
+  m_StaticShadowCaster: 0
+  m_MotionVectors: 1
+  m_LightProbeUsage: 1
+  m_ReflectionProbeUsage: 1
+  m_RayTracingMode: 2
+  m_RayTraceProcedural: 0
+  m_RenderingLayerMask: 1
+  m_RendererPriority: 0
+  m_Materials:
+  - {fileID: 2100000, guid: d07053ba247cf7d4c98c84f64f0a5f93, type: 2}
+  m_StaticBatchInfo:
+    firstSubMesh: 0
+    subMeshCount: 0
+  m_StaticBatchRoot: {fileID: 0}
+  m_ProbeAnchor: {fileID: 0}
+  m_LightProbeVolumeOverride: {fileID: 0}
+  m_ScaleInLightmap: 1
+  m_ReceiveGI: 1
+  m_PreserveUVs: 0
+  m_IgnoreNormalsForChartDetection: 0
+  m_ImportantGI: 0
+  m_StitchLightmapSeams: 1
+  m_SelectedEditorRenderState: 3
+  m_MinimumChartSize: 4
+  m_AutoUVMaxDistance: 0.5
+  m_AutoUVMaxAngle: 89
+  m_LightmapParameters: {fileID: 0}
+  m_SortingLayerID: 0
+  m_SortingLayer: 0
+  m_SortingOrder: 0
+  m_AdditionalVertexStreams: {fileID: 0}
+--- !u!33 &877229278
+MeshFilter:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 877229275}
+  m_Mesh: {fileID: 7384567162086786122, guid: 817d8420290fdd3489069d24048f7a4d, type: 3}
 --- !u!1 &879241171
 GameObject:
   m_ObjectHideFlags: 0
@@ -19726,7 +19809,11 @@ PrefabInstance:
     m_RemovedComponents: []
     m_RemovedGameObjects:
     - {fileID: 5437656792253021357, guid: 817d8420290fdd3489069d24048f7a4d, type: 3}
-    m_AddedGameObjects: []
+    m_AddedGameObjects:
+    - targetCorrespondingSourceObject: {fileID: -8679921383154817045, guid: 817d8420290fdd3489069d24048f7a4d,
+        type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 877229276}
     m_AddedComponents:
     - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 817d8420290fdd3489069d24048f7a4d,
         type: 3}

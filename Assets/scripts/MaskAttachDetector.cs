@@ -1,99 +1,105 @@
 using UnityEngine;
-using UnityEngine.UI;
-using UnityEngine.XR.Interaction.Toolkit;
 
 public class MaskAttachDetector : MonoBehaviour
 {
-    public GameObject maskModel;         // Maske görseli
+    public GameObject maskModel;
     public string triggerTag = "MaskTrigger";
-    public Transform headTarget;         // CenterEyeAnchor vb.
+    public Transform headTarget;
 
-    // -------------- Buraya eklemeler baþlýyor --------------
     [Header("Light Ayarlarý")]
-    public Light directionalLight;       // Inspector’dan saðlanacak Directional Light referansý
-    public Color attachedLightColor = Color.gray; // Maske takýldýðýnda kullanacaðýmýz renk
-    public float attachedIntensity = 0.95f;        // Maske takýldýðýnda ýþýk yoðunluðu (düþük yaparak karartma)
-    private Color originalLightColor;    // Baþlangýçtaki ýþýk rengini saklamak için
-    private float originalIntensity;     // Baþlangýçtaki ýþýk yoðunluðunu saklamak için
-    // -------------- Buraya eklemeler bitiyor --------------
+    public Light directionalLight;
+    public Color attachedLightColor = Color.gray;
+    public float attachedIntensity = 0.95f;
 
-    private XRGrabInteractable grabInteractable;
+    private Color originalLightColor;
+    private float originalIntensity;
+
     private bool isAttached = false;
+    private float attachCooldown = 0f; // tetikleme kilidi için
 
     private void Start()
     {
-        grabInteractable = GetComponent<XRGrabInteractable>();
-
-        if (grabInteractable != null)
-        {
-            grabInteractable.selectEntered.AddListener(OnGrabbed);
-        }
-
-        // -------------- Burada Light referanslarýný kaydediyoruz --------------
         if (directionalLight != null)
         {
             originalLightColor = directionalLight.color;
             originalIntensity = directionalLight.intensity;
         }
-        else
-        {
-            Debug.LogWarning("MaskAttachDetector: Inspector'dan 'directionalLight' atanmamýþ!");
-        }
-        // -----------------------------------------------------------------------
     }
 
     private void OnTriggerEnter(Collider other)
     {
-        if (isAttached) return;
+        if (isAttached || attachCooldown > 0f) return;
 
         if (other.CompareTag(triggerTag))
         {
-            Debug.Log("Maske kafaya takýldý!");
+            Debug.Log("Maske takýldý!");
 
             isAttached = true;
 
-            // Görseli gizle
             if (maskModel != null)
                 maskModel.SetActive(false);
 
-            // Kafaya yapýþtýr
             if (headTarget != null)
-                transform.SetParent(headTarget, true); // worldPosition korunsun
+                transform.SetParent(headTarget, true);
 
-            // -------------- Burada ýþýk ayarlarýný deðiþtiriyoruz --------------
             if (directionalLight != null)
             {
                 directionalLight.color = attachedLightColor;
                 directionalLight.intensity = attachedIntensity;
             }
-            // -------------------------------------------------------------------
+
+            Rigidbody rb = GetComponent<Rigidbody>();
+            if (rb != null)
+            {
+                rb.isKinematic = true;
+                rb.useGravity = false;
+                rb.velocity = Vector3.zero;
+                rb.angularVelocity = Vector3.zero;
+            }
         }
     }
 
-    private void OnGrabbed(SelectEnterEventArgs args)
+    private void Update()
     {
-        if (isAttached)
+        // Cooldown sayacý
+        if (attachCooldown > 0f)
+            attachCooldown -= Time.deltaTime;
+
+        if (isAttached && Input.GetKeyDown(KeyCode.B))
         {
-            Debug.Log("Maske çýkarýldý!");
+            Debug.Log("Maske çýkarýlýyor");
 
             isAttached = false;
 
-            // Görseli geri getir
             if (maskModel != null)
                 maskModel.SetActive(true);
 
-            // Kafadan ayýr
-            transform.SetParent(null);
+            Vector3 worldPos = transform.position;
+            Quaternion worldRot = transform.rotation;
 
-            // -------------- Iþýðý eski haline döndürüyoruz --------------
+            transform.SetParent(null);
+            transform.position = worldPos;
+            transform.rotation = worldRot;
+
+            Rigidbody rb = GetComponent<Rigidbody>();
+            if (rb != null)
+            {
+                rb.isKinematic = false;
+                rb.useGravity = true;
+
+                // Maskeyi ileri fýrlat
+                Vector3 throwDir = transform.forward + Vector3.up * 0.3f;
+                rb.AddForce(throwDir * 2f, ForceMode.VelocityChange);
+            }
+
             if (directionalLight != null)
             {
                 directionalLight.color = originalLightColor;
                 directionalLight.intensity = originalIntensity;
             }
-            // -------------------------------------------------------------
+
+            // Tetiklemeyi 1 saniye engelle
+            attachCooldown = 1f;
         }
     }
 }
-
-
