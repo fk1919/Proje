@@ -31971,6 +31971,10 @@ PrefabInstance:
         type: 3}
       insertIndex: -1
       addedObject: {fileID: 1352292125}
+    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 817d8420290fdd3489069d24048f7a4d,
+        type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1352292126}
   m_SourcePrefab: {fileID: 100100000, guid: 817d8420290fdd3489069d24048f7a4d, type: 3}
 --- !u!4 &1352292124 stripped
 Transform:
@@ -31999,6 +32003,28 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 1.8, y: 2.4, z: 2.25}
   m_Center: {x: 0, y: -0.3, z: 0}
+--- !u!114 &1352292126
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 274559125}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 43f86b14a27b52f4f9298c33015b5c26, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _transferOnSecondSelection: 0
+  _addNewPointsToFront: 0
+  _forwardElement: {fileID: 0}
+  _oneGrabTransformer: {fileID: 0}
+  _twoGrabTransformer: {fileID: 0}
+  _targetTransform: {fileID: 0}
+  _maxGrabPoints: -1
+  _rigidbody: {fileID: 0}
+  _kinematicWhileSelected: 1
+  _throwWhenUnselected: 1
 --- !u!1 &1355706610
 GameObject:
   m_ObjectHideFlags: 0

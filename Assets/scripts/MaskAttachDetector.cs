@@ -1,5 +1,6 @@
 using UnityEngine;
 using Oculus.VR; // OVRInput için bu kalsýn (hata vermiyorsa sorun yok)
+using Oculus;
 using Oculus.Interaction; // <<< YENÝ EKLENECEK SATIR: Grabbable sýnýfý için
 
 
@@ -51,43 +52,73 @@ public class MaskAttachDetector : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
+        // Debug mesajlarý ekliyoruz
+        Debug.Log($"OnTriggerEnter tetiklendi. Çarpan obje: {other.gameObject.name}, Tag: {other.tag}");
+
         if (isAttached || attachCooldown > 0f) return;
 
         if (other.CompareTag(triggerTag))
         {
-            Debug.Log("Maske takýldý!");
+            Debug.Log("Maske takýlma tetikleyicisi bulundu!");
 
             isAttached = true;
 
+            // 1. Maskenin görselini gizle
             if (maskModel != null)
-                maskModel.SetActive(false);
-
-            if (headTarget != null)
-                transform.SetParent(headTarget, true);
-
-            if (directionalLight != null)
             {
-                directionalLight.color = attachedLightColor;
-                directionalLight.intensity = attachedIntensity;
+                maskModel.SetActive(false);
+                Debug.Log("Maske modeli gizlendi.");
+            }
+            else
+            {
+                Debug.LogError("Maske modeli (maskModel) Inspector'da atanmamýþ!");
             }
 
+            // 2. Kaský kafaya parent yap
+            if (headTarget != null)
+            {
+                transform.SetParent(headTarget, true);
+                Debug.Log($"Maske, {headTarget.name} objesine parent yapýldý. Yeni parent: {transform.parent.name}");
+            }
+            else
+            {
+                Debug.LogError("Kafa hedefi (headTarget) Inspector'da atanmamýþ! Maske parent olamayacak.");
+            }
+
+            // 3. Rigidbody ayarlarý
             Rigidbody rb = GetComponent<Rigidbody>();
             if (rb != null)
             {
-                rb.isKinematic = true;
+                rb.isKinematic = true; // Fiziksel etkileþimi durdur
                 rb.useGravity = false;
                 rb.velocity = Vector3.zero;
                 rb.angularVelocity = Vector3.zero;
+                Debug.Log("Maske Rigidbody kinematic yapýldý ve fizik durduruldu.");
+            }
+            else
+            {
+                Debug.LogError("Maske üzerinde Rigidbody bulunamadý!");
             }
 
-            // Grabbable'ý pasif hale getir
+            // 4. Grabbable'ý pasif hale getir (tekrar tutulmasýný engellemek için)
             if (grabbableComponent != null)
             {
                 grabbableComponent.enabled = false;
-                // Eðer maske takýlmadan önce tutuluyorsa, kendiliðinden býrakacaktýr.
+                Debug.Log("Grabbable komponenti kapatýldý.");
             }
+            else
+            {
+                Debug.LogError("Grabbable komponenti (grabbableComponent) referansý boþ!");
+            }
+
+            // ... (ýþýk ayarlarý) ...
+        }
+        else
+        {
+            Debug.Log($"Çarpan obje '{other.gameObject.name}', tag '{other.tag}' ama beklenen tag '{triggerTag}' deðil.");
         }
     }
+
 
     private void Update()
     {
