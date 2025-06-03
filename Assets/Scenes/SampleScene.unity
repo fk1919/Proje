@@ -10700,6 +10700,7 @@ GameObject:
   - component: {fileID: 527767557}
   - component: {fileID: 527767556}
   - component: {fileID: 527767562}
+  - component: {fileID: 527767563}
   m_Layer: 0
   m_Name: '[BuildingBlock] Maske'
   m_TagString: Mask
@@ -10860,6 +10861,28 @@ MonoBehaviour:
   attachedIntensity: 0.95
   detachController: 2
   detachButton: 16384
+--- !u!114 &527767563
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 527767555}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 43f86b14a27b52f4f9298c33015b5c26, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _transferOnSecondSelection: 1
+  _addNewPointsToFront: 0
+  _forwardElement: {fileID: 0}
+  _oneGrabTransformer: {fileID: 0}
+  _twoGrabTransformer: {fileID: 0}
+  _targetTransform: {fileID: 0}
+  _maxGrabPoints: -1
+  _rigidbody: {fileID: 527767556}
+  _kinematicWhileSelected: 1
+  _throwWhenUnselected: 1
 --- !u!1 &529951215
 GameObject:
   m_ObjectHideFlags: 0
