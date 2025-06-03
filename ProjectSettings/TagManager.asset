@@ -9,7 +9,6 @@ TagManager:
   - MaskTrigger
   - blackTintImage
   - TableTrigger
-  - Torch
   layers:
   - Default
   - TransparentFX
