@@ -1,5 +1,4 @@
 using UnityEngine;
-using Oculus.VR;
 using Oculus.Interaction;
 
 public class MaskAttachDetector : MonoBehaviour
