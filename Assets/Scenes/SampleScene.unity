@@ -10809,6 +10809,9 @@ MonoBehaviour:
   attachedIntensity: 0.95
   detachController: 2
   detachButton: 16384
+  leftHandInteractorObject: {fileID: 125049788}
+  rightHandInteractorObject: {fileID: 493855450}
+  detachProximityThreshold: 0.2
 --- !u!114 &527767563
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -29121,8 +29124,8 @@ BoxCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
-  m_Size: {x: 0.1, y: 0.1, z: 0.1}
-  m_Center: {x: 0, y: 0, z: 0}
+  m_Size: {x: 0.46982765, y: 0.23841923, z: 0.27650738}
+  m_Center: {x: -0.10036707, y: 0.30046257, z: 0.27722967}
 --- !u!1 &1228928493
 GameObject:
   m_ObjectHideFlags: 0
