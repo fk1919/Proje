@@ -1,244 +1,161 @@
-using UnityEngine;
+ï»¿using UnityEngine;
 using Oculus.VR;
-using Oculus.Interaction; // Grabbable için (IInteractor'ý doðrudan kullanmayacaðýz)
+using Oculus.Interaction;
 
 public class MaskAttachDetector : MonoBehaviour
 {
-    public GameObject maskModel; // Maskenin görsel modelini içeren GameObject
-    public string triggerTag = "MaskTrigger"; // Kafa collider'ýnýn tag'i
-    public Transform headTarget; // Kaskýn takýldýðý yer (kafa collider'ý)
+    [Header("Mask ve Head AyarlarÄ±")]
+    public GameObject maskModel;
+    public Transform headTarget;
 
-    // Iþýk ayarlarý
+    [Header("Mesafeye GÃ¶re Otomatik Takma")]
+    [Tooltip("Maskeyi takmak iÃ§in headTarget'e ne kadar yakÄ±n olmasÄ± gerektiÄŸi (metre).")]
+    public float attachProximityThreshold = 0.20f;
+
+    [Header("IÅŸÄ±k AyarlarÄ±")]
     public Light directionalLight;
     public Color attachedLightColor = Color.gray;
     public float attachedIntensity = 0.95f;
 
-    private Grabbable grabbableComponent;
+    [Header("VR KontrolcÃ¼ ve Detach AyarlarÄ±")]
+    public OVRInput.Controller detachController = OVRInput.Controller.RHand;
+    public OVRInput.Button detachButton = OVRInput.Button.PrimaryHandTrigger;
+    public float detachProximityThreshold = 0.20f;
 
-    // VR Kontrolcü ayarlarý
-    public OVRInput.Controller detachController = OVRInput.Controller.RHand; // Hangi elin çýkaracaðýný belirle
-    public OVRInput.Button detachButton = OVRInput.Button.PrimaryHandTrigger; // Hangi tuþla çýkarýlacak
-
-    // YENÝ: Hangi Interactor'ýn maskeyi çýkaracaðýný kontrol etmek ve tutmak için
-    [Header("Interactor Referanslarý")]
-    // MonoBehaviour olarak tanýmlýyoruz. Inspector'dan HandGrabInteractor veya TouchHandGrabInteractor gibi objeleri atayýn.
-    // Bu objelerin üzerinde Oculus.Interaction.IInteractor implement eden bir script olmalý, ancak kodda doðrudan IInteractor'ý kullanmayacaðýz.
-    public MonoBehaviour leftHandInteractorObject; // Sol el Interactor objesi (Inspector'dan ata)
-    public MonoBehaviour rightHandInteractorObject; // Sað el Interactor objesi (Inspector'dan ata)
-    public float detachProximityThreshold = 0.2f; // Çýkarma için elin maskeye ne kadar yakýn olmasý gerektiði (metre)
-
-    private Color originalLightColor;
-    private float originalIntensity;
+    [Header("Interactor ReferanslarÄ±")]
+    public MonoBehaviour leftHandInteractorObject;
+    public MonoBehaviour rightHandInteractorObject;
 
     private bool isAttached = false;
     private float attachCooldown = 0f;
+    private Color originalLightColor;
+    private float originalIntensity;
+    private Grabbable grabbableComponent;
 
     private void Start()
     {
-        // Yönsel ýþýk referansýný kontrol et ve orijinal deðerleri kaydet
         if (directionalLight != null)
         {
             originalLightColor = directionalLight.color;
             originalIntensity = directionalLight.intensity;
-            Debug.Log($"MaskAttachDetector Baþladý. Orijinal Iþýk Renk: {originalLightColor}, Yoðunluk: {originalIntensity}");
         }
         else
         {
-            Debug.LogError("Directional Light Inspector'da atanmamýþ!");
+            Debug.LogError("Directional Light Inspector'da atanmamÄ±ÅŸ!");
         }
 
-        // Grabbable komponentini al
         grabbableComponent = GetComponent<Grabbable>();
         if (grabbableComponent == null)
         {
-            Debug.LogError("MaskAttachDetector: Grabbable komponenti bulunamadý! Maske objenizde Grabbable scripti olduðundan emin olun.");
+            Debug.LogError("Grabbable komponenti bulunamadÄ±!");
         }
-        Debug.Log($"Trigger Tag: {triggerTag}, Head Target: {(headTarget != null ? headTarget.name : "Yok")}, Mask Model: {(maskModel != null ? maskModel.name : "Yok")}");
 
-        // Interactor referanslarýnýn atanýp atanmadýðýný kontrol et
         if (leftHandInteractorObject == null || rightHandInteractorObject == null)
         {
-            Debug.LogWarning("LeftHandInteractorObject veya RightHandInteractorObject Inspector'da atanmamýþ. Çýkarma iþlemi için el yakýnlýk kontrolü çalýþmayabilir.");
-        }
-    }
-
-    private void OnTriggerEnter(Collider other)
-    {
-        Debug.Log($"OnTriggerEnter tetiklendi. Çarpan obje: {other.gameObject.name}, Tag: {other.tag}");
-
-        // Zaten takýlýysa veya cooldown varsa iþlemi durdur
-        if (isAttached || attachCooldown > 0f)
-        {
-            Debug.Log($"OnTriggerEnter engellendi: isAttached={isAttached}, attachCooldown={attachCooldown:F2}");
-            return;
-        }
-
-        // Kafa tetikleyicisiyle çarpýþtýysa
-        if (other.CompareTag(triggerTag))
-        {
-            Debug.Log("Maske takýlma tetikleyicisi bulundu! Takýlma iþlemi baþlýyor...");
-
-            isAttached = true; // Maskeyi takýlý olarak iþaretle
-
-            // Maskenin görselini gizle
-            if (maskModel != null)
-            {
-                maskModel.SetActive(false);
-                Debug.Log("Maske modeli gizlendi.");
-            }
-            else
-            {
-                Debug.LogError("Maske modeli (maskModel) Inspector'da atanmamýþ!");
-            }
-
-            // Maskeyi kafa objesine parent yap
-            if (headTarget != null)
-            {
-                Transform originalParent = transform.parent; // Mevcut parent'ý kaydet
-                transform.SetParent(headTarget, true); // Dünya pozisyonunu koruyarak parent yap
-                Debug.Log($"Maske, {headTarget.name} objesine parent yapýldý. Önceki parent: {(originalParent != null ? originalParent.name : "Yok")}, Yeni parent: {transform.parent.name}");
-            }
-            else
-            {
-                Debug.LogError("Kafa hedefi (headTarget) Inspector'da atanmamýþ! Maske parent olamayacak.");
-            }
-
-            // Rigidbody'yi kinematic yapýp fiziði durdur
-            Rigidbody rb = GetComponent<Rigidbody>();
-            if (rb != null)
-            {
-                rb.isKinematic = true;
-                rb.useGravity = false;
-                rb.velocity = Vector3.zero;
-                rb.angularVelocity = Vector3.zero;
-                Debug.Log("Maske Rigidbody kinematic yapýldý ve fizik durduruldu.");
-            }
-            else
-            {
-                Debug.LogError("Maske üzerinde Rigidbody bulunamadý!");
-            }
-
-            // Grabbable'ý pasif hale getir (takýlýyken tutulmasýný engelle)
-            if (grabbableComponent != null)
-            {
-                grabbableComponent.enabled = false;
-                Debug.Log("Grabbable komponenti kapatýldý.");
-            }
-            else
-            {
-                Debug.LogError("Grabbable komponenti (grabbableComponent) referansý boþ!");
-            }
-
-            // Ortam ýþýðýný karart
-            if (directionalLight != null)
-            {
-                directionalLight.color = attachedLightColor;
-                directionalLight.intensity = attachedIntensity;
-                Debug.Log($"Iþýk ayarlarý deðiþtirildi: Renk={attachedLightColor}, Yoðunluk={attachedIntensity}");
-            }
-            else
-            {
-                Debug.LogError("Directional Light Inspector'da atanmamýþ!");
-            }
-
-            Debug.Log("Maske takýlma iþlemi tamamlandý (isAttached=true).");
-        }
-        else
-        {
-            Debug.LogWarning($"Çarpan obje '{other.gameObject.name}', tag '{other.tag}' ama beklenen tag '{triggerTag}' deðil. Takýlma gerçekleþmedi.");
+            Debug.LogWarning("Interactor referanslarÄ± atanmadÄ±.");
         }
     }
 
     private void Update()
     {
-        // Cooldown süresini azalt
         if (attachCooldown > 0f)
         {
             attachCooldown -= Time.deltaTime;
         }
 
-        // Maske takýlýysa, cooldown yoksa ve çýkarma butonu basýlý tutuluyorsa
+        if (!isAttached && attachCooldown <= 0f && headTarget != null)
+        {
+            float distanceToHead = Vector3.Distance(transform.position, headTarget.position);
+            if (distanceToHead <= attachProximityThreshold)
+            {
+                AttachMask();
+            }
+        }
+
         if (isAttached && attachCooldown <= 0f)
         {
             if (OVRInput.Get(detachButton, detachController))
             {
-                Debug.Log($"Çýkarma butonu ({detachButton}) basýlý tutuluyor! Kontrolcü: {detachController}.");
-
-                // YENÝ KONTROL: El maskeye yeterince yakýn mý?
-                Transform activeInteractorTransform = null; // Interactor'ýn Transform'unu tutacaðýz
+                Transform activeInteractorTransform = null;
                 if (detachController == OVRInput.Controller.RHand && rightHandInteractorObject != null)
                 {
-                    activeInteractorTransform = rightHandInteractorObject.transform; // MonoBehaviour.transform
+                    activeInteractorTransform = rightHandInteractorObject.transform;
                 }
                 else if (detachController == OVRInput.Controller.LHand && leftHandInteractorObject != null)
                 {
-                    activeInteractorTransform = leftHandInteractorObject.transform; // MonoBehaviour.transform
+                    activeInteractorTransform = leftHandInteractorObject.transform;
                 }
 
                 if (activeInteractorTransform != null)
                 {
-                    // Maskenin þu anki dünya pozisyonu (kafanýn üzerinde)
-                    Vector3 maskCurrentWorldPos = transform.position;
-                    // Interactor'ýn (elin) dünya pozisyonu
-                    Vector3 interactorWorldPos = activeInteractorTransform.position; // Sadece .position
-
-                    float distance = Vector3.Distance(maskCurrentWorldPos, interactorWorldPos);
-                    Debug.Log($"El ile maske arasý mesafe: {distance:F2}m. Eþik: {detachProximityThreshold:F2}m.");
-
-                    if (distance <= detachProximityThreshold)
+                    float distanceHandToMask = Vector3.Distance(transform.position, activeInteractorTransform.position);
+                    if (distanceHandToMask <= detachProximityThreshold)
                     {
-                        Debug.Log("El maskeye yeterince yakýn. Maskeyi çýkarmayý deneme koþulu saðlandý.");
-                        // DetachMask metoduna hangi interactor'ýn transformunu göndereceðimizi belirtelim
                         DetachMask(activeInteractorTransform);
-                    }
-                    else
-                    {
-                        Debug.Log("El maskeye yeterince yakýn deðil. Çýkarma iþlemi tetiklenmedi.");
                     }
                 }
                 else
                 {
-                    Debug.LogWarning("Detach iþlemi için atanmýþ Interactor Object bulunamadý veya yanlýþ kontrolcü seçildi.");
+                    Debug.LogWarning("Detach iÅŸlemi iÃ§in geÃ§erli bir Interactor yok.");
                 }
             }
         }
     }
 
-    // YENÝ: DetachMask metodu Interactor Transform'u argüman alacak
-    private void DetachMask(Transform interactorTransformToGrabWith)
+    private void AttachMask()
     {
-        Debug.Log("DetachMask çaðrýldý: Maske çýkarýlýyor.");
+        isAttached = true;
 
-        // Maske hala bir parent'a baðlý mý kontrol et
-        if (transform.parent != null)
+        if (maskModel != null)
         {
-            Debug.Log($"Maske hala bir parent'a baðlý: {transform.parent.name}. Ayrýlýyor.");
+            maskModel.SetActive(false);
         }
         else
         {
-            Debug.Log("Maskenin zaten parent'ý yoktu.");
+            Debug.LogError("Maske modeli atanmamÄ±ÅŸ!");
         }
 
-        isAttached = false; // Maskeyi çýkarýlmýþ olarak iþaretle
+        transform.SetParent(headTarget, true);
 
-        // Maskenin görselini tekrar aktif et
+        Rigidbody rb = GetComponent<Rigidbody>();
+        if (rb != null)
+        {
+            rb.isKinematic = true;
+            rb.useGravity = false;
+            rb.velocity = Vector3.zero;
+            rb.angularVelocity = Vector3.zero;
+        }
+
+        if (grabbableComponent != null)
+        {
+            grabbableComponent.enabled = false;
+        }
+
+        if (directionalLight != null)
+        {
+            directionalLight.color = attachedLightColor;
+            directionalLight.intensity = attachedIntensity;
+        }
+
+        attachCooldown = 0.5f;
+        Debug.Log("AttachMask: Maske baÅŸarÄ±yla takÄ±ldÄ±.");
+    }
+
+    private void DetachMask(Transform interactorTransformToGrabWith)
+    {
+        isAttached = false;
+
         if (maskModel != null)
         {
             maskModel.SetActive(true);
-            Debug.Log("Maske modeli aktif edildi.");
         }
-        else { Debug.LogError("Maske modeli (maskModel) Inspector'da atanmamýþ!"); }
 
-
-        // Maskeyi parent'tan ayýr ve dünya pozisyon/rotasyonunu koru
         Vector3 worldPos = transform.position;
         Quaternion worldRot = transform.rotation;
-        transform.SetParent(null); // Parent'ý ayýr
-        transform.position = worldPos; // Dünya pozisyonunu koru
-        transform.rotation = worldRot; // Dünya rotasyonunu koru
-        Debug.Log($"Maske parent'tan ayrýldý. Konum: {transform.position}, Rotasyon: {transform.rotation}");
+        transform.SetParent(null);
+        transform.position = worldPos;
+        transform.rotation = worldRot;
 
-        // Rigidbody'yi fiziksel hale getir ve yer çekimini etkinleþtir
         Rigidbody rb = GetComponent<Rigidbody>();
         if (rb != null)
         {
@@ -246,45 +163,20 @@ public class MaskAttachDetector : MonoBehaviour
             rb.useGravity = true;
             rb.velocity = Vector3.zero;
             rb.angularVelocity = Vector3.zero;
-            Debug.Log("Maske Rigidbody kinematic'ten çýkarýldý ve fizik aktif edildi.");
         }
-        else { Debug.LogError("Maske üzerinde Rigidbody bulunamadý!"); }
 
-
-        // Ortam ýþýðýný orijinal haline getir
         if (directionalLight != null)
         {
             directionalLight.color = originalLightColor;
             directionalLight.intensity = originalIntensity;
-            Debug.Log($"Iþýk ayarlarý orijinal haline getirildi: Renk={originalLightColor}, Yoðunluk={originalIntensity}");
         }
-        else { Debug.LogError("Directional Light Inspector'da atanmamýþ!"); }
 
-
-        // Grabbable'ý tekrar aktif hale getir (tekrar tutulabilir yap)
         if (grabbableComponent != null)
         {
             grabbableComponent.enabled = true;
-            Debug.Log($"Grabbable aktif edildi.");
-
-            // YENÝ: Maskeyi çýkaran elin transformunu kullanarak bir yakalama denemesi
-            // IInteractor'ýn Transform ve CanSelect üyelerine doðrudan eriþemediðimiz için,
-            // burada sadece basit bir fiziksel yakalama davranýþý beklenir.
-            if (interactorTransformToGrabWith != null)
-            {
-                // Artýk IInteractor'ý direkt olarak kullanmayacaðýz.
-                // Sadece Debug.Log için Interactor objesinin adýný alýyoruz.
-                Debug.Log($"Maske {interactorTransformToGrabWith.gameObject.name} objesi tarafýndan seçilmeye çalýþýldý (otomatik yakalama bekleniyor).");
-            }
-            else
-            {
-                Debug.LogWarning("Maske çýkarýldý ancak Interactor Transform referansý null. Kullanýcýnýn maskeyi tekrar tutmasý gerekebilir.");
-            }
         }
-        else { Debug.LogError("Grabbable komponenti (grabbableComponent) referansý boþ!"); }
 
-
-        attachCooldown = 1f; // Tekrar takýlmayý engellemek için cooldown baþlat
-        Debug.Log("DetachMask iþlemi tamamlandý. Cooldown baþlatýldý.");
+        attachCooldown = 0.5f;
+        Debug.Log("DetachMask: Maske Ã§Ä±karÄ±ldÄ±.");
     }
 }

@@ -10802,16 +10802,16 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   maskModel: {fileID: 274559125}
-  triggerTag: MaskTrigger
   headTarget: {fileID: 1859862461}
+  attachProximityThreshold: 0.2
   directionalLight: {fileID: 410087040}
   attachedLightColor: {r: 0.5, g: 0.5, b: 0.5, a: 1}
   attachedIntensity: 0.95
   detachController: 2
-  detachButton: 16384
-  leftHandInteractorObject: {fileID: 125049788}
+  detachButton: -2012741504
+  detachProximityThreshold: 1
+  leftHandInteractorObject: {fileID: 0}
   rightHandInteractorObject: {fileID: 493855450}
-  detachProximityThreshold: 0.2
 --- !u!114 &527767563
 MonoBehaviour:
   m_ObjectHideFlags: 0
