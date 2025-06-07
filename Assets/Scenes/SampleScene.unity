@@ -10748,7 +10748,7 @@ BoxCollider:
     serializedVersion: 2
     m_Bits: 0
   m_LayerOverridePriority: 0
-  m_IsTrigger: 1
+  m_IsTrigger: 0
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
@@ -10808,10 +10808,10 @@ MonoBehaviour:
   attachedLightColor: {r: 0.5, g: 0.5, b: 0.5, a: 1}
   attachedIntensity: 0.95
   detachController: 2
-  detachButton: -2012741504
-  detachProximityThreshold: 1
-  leftHandInteractorObject: {fileID: 0}
-  rightHandInteractorObject: {fileID: 493855450}
+  detachButton: 16384
+  detachProximityThreshold: 0.5
+  leftHandInteractorObject: {fileID: 1238706944}
+  rightHandInteractorObject: {fileID: 1327874625}
 --- !u!114 &527767563
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -31958,10 +31958,6 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 817d8420290fdd3489069d24048f7a4d,
         type: 3}
       insertIndex: -1
-      addedObject: {fileID: 1352292125}
-    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 817d8420290fdd3489069d24048f7a4d,
-        type: 3}
-      insertIndex: -1
       addedObject: {fileID: 1352292126}
   m_SourcePrefab: {fileID: 100100000, guid: 817d8420290fdd3489069d24048f7a4d, type: 3}
 --- !u!4 &1352292124 stripped
@@ -31970,27 +31966,6 @@ Transform:
     type: 3}
   m_PrefabInstance: {fileID: 1352292123}
   m_PrefabAsset: {fileID: 0}
---- !u!65 &1352292125
-BoxCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 274559125}
-  m_Material: {fileID: 0}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_LayerOverridePriority: 0
-  m_IsTrigger: 0
-  m_ProvidesContacts: 0
-  m_Enabled: 1
-  serializedVersion: 3
-  m_Size: {x: 1.8, y: 2.4, z: 2.25}
-  m_Center: {x: 0, y: -0.3, z: 0}
 --- !u!114 &1352292126
 MonoBehaviour:
   m_ObjectHideFlags: 0
