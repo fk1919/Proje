@@ -9,6 +9,7 @@ TagManager:
   - MaskTrigger
   - blackTintImage
   - TableTrigger
+  - HandCollider
   layers:
   - Default
   - TransparentFX

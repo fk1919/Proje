@@ -1,31 +1,32 @@
 ﻿using UnityEngine;
 using Oculus.VR;
-using Oculus.Interaction; // Grabbable için (IInteractor'ı doğrudan kullanmayacağız)
+using Oculus.Interaction; // Grabbable sınıfı için
 
 public class MaskAttachDetector : MonoBehaviour
 {
-    [Header("Mask ve Head Ayarları")]
+    [Header("Maske ve Kafa Ayarları")]
     public GameObject maskModel; // Maskenin görsel modelini içeren GameObject
     public Transform headTarget; // Kaskın takıldığı yer (kafa objesinin Transform'u)
 
-    [Header("Mesafeye Gööre Otomatik Takma")]
+    [Header("Mesafeye Göre Otomatik Takma")]
     [Tooltip("Maskeyi takmak için headTarget'e ne kadar yakın olması gerektiği (metre).")]
-    public float attachProximityThreshold = 0.20f;
+    public float attachProximityThreshold = 0.20f; // Maskeyi takmak için yakınlık mesafesi
 
     [Header("Işık Ayarları")]
     public Light directionalLight; // Sahnedeki yönsel ışık
     public Color attachedLightColor = Color.gray; // Takılıyken ışık rengi
     public float attachedIntensity = 0.95f; // Takılıyken ışık yoğunluğu
 
-    [Header("VR Kontrolcü ve Detach Ayarları")]
+    [Header("VR Kontrolcü ve Çıkarma Ayarları")]
     public OVRInput.Controller detachController = OVRInput.Controller.RHand; // Hangi elin çıkaracağını belirle
     public OVRInput.Button detachButton = OVRInput.Button.PrimaryHandTrigger; // Hangi tuşla çıkarılacak (Grip tuşu)
-    public float detachProximityThreshold = 0.20f; // Çıkarma için elin maskeye ne kadar yakın olması gerektiği
 
     [Header("Interactor Referansları")]
-    // Inspector'dan HandGrabInteractor veya TouchHandGrabInteractor gibi scriptlerin bağlı olduğu objeleri atayın.
-    public MonoBehaviour leftHandInteractorObject; // Sol el Interactor objesi
-    public MonoBehaviour rightHandInteractorObject; // Sağ el Interactor objesi
+    // Inspector'dan HandGrabInteractor veya TouchHandGrabInteractor gibi scriptlerin bağlı olduğu GameObject'leri atayın.
+    // Bu GameObject'lerin üzerinde Box Collider (Is Trigger = true) ve "HandCollider" tag'i olmalı.
+    public GameObject leftHandInteractorGameObject; // Sol el Interactor'ın GameObject'i
+    public GameObject rightHandInteractorGameObject; // Sağ el Interactor'ın GameObject'i
+    public string handColliderTag = "HandCollider"; // El kontrolcülerine vereceğimiz Tag
 
     private bool isAttached = false; // Maske takılı mı?
     private float attachCooldown = 0f; // Hızlı takma/çıkarma döngüsünü engellemek için
@@ -45,7 +46,7 @@ public class MaskAttachDetector : MonoBehaviour
         }
         else
         {
-            Debug.LogError("MaskAttachDetector: Directional Light Inspector'da atanmamış!");
+            Debug.LogError("MaskAttachDetector: Yönsel Işık Inspector'da atanmamış!");
         }
 
         // Grabbable komponentini al
@@ -55,12 +56,12 @@ public class MaskAttachDetector : MonoBehaviour
             Debug.LogError("MaskAttachDetector: Grabbable komponenti bulunamadı! Maske objenizde Grabbable scripti olduğundan emin olun.");
         }
 
-        // Interactor referanslarının atanıp atanmadığını kontrol et
-        if (leftHandInteractorObject == null || rightHandInteractorObject == null)
+        // Interactor GameObject referanslarının atanıp atanmadığını kontrol et
+        if (leftHandInteractorGameObject == null || rightHandInteractorGameObject == null)
         {
-            Debug.LogWarning("MaskAttachDetector: Interactor referansları atanmadı. El yakınlık kontrolü ve çıkarma çalışmayabilir.");
+            Debug.LogWarning("MaskAttachDetector: Interactor GameObject referansları atanmadı. El ile çıkarma çalışmayabilir.");
         }
-        Debug.Log($"MaskAttachDetector: Trigger Tag: Yok (OnTriggerEnter kullanılmıyor), Head Target: {(headTarget != null ? headTarget.name : "Yok")}, Mask Model: {(maskModel != null ? maskModel.name : "Yok")}");
+        Debug.Log($"MaskAttachDetector: Kafa Hedefi: {(headTarget != null ? headTarget.name : "Yok")}, Maske Modeli: {(maskModel != null ? maskModel.name : "Yok")}, El Collider Etiketi: {handColliderTag}");
     }
 
     private void Update()
@@ -72,79 +73,94 @@ public class MaskAttachDetector : MonoBehaviour
         }
 
         // Maske takılı değilse ve cooldown yoksa ve kafa hedefi atanmışsa
-        // Maskeyi takmak için mesafeyi kontrol et
+        // Maskeyi takmak için mesafeyi kontrol et (burası değişmedi)
         if (!isAttached && attachCooldown <= 0f && headTarget != null)
         {
             float distanceToHead = Vector3.Distance(transform.position, headTarget.position);
-            // Debug.Log($"Attach Kontrol: Maske ile kafa arası mesafe: {distanceToHead:F2}m."); // Çok fazla loglamamak için yorumda
             if (distanceToHead <= attachProximityThreshold)
             {
                 AttachMask(); // Maskeyi tak
             }
         }
 
-        // Maske takılıysa ve cooldown yoksa
-        if (isAttached && attachCooldown <= 0f)
+        // Maske takılıysa VE çıkarma için ön hazırlık yapılıyorsa VE maske gerçekten tutulduysa
+        if (isAttached && isPreparingToDetach && grabbableComponent != null && grabbableComponent.SelectingPointsCount > 0)
         {
-            // Eğer çıkarma butonu basılı tutuluyorsa
-            if (OVRInput.Get(detachButton, detachController))
+            Debug.Log("Update: Maske ön hazırlık durumunda ve Interactor tarafından tutuldu. Tam çıkarma işlemi başlatılıyor.");
+            CompleteDetach(); // Tam çıkarma işlemini yap
+        }
+    }
+
+    // El collider'ı maskeye temas ettiğinde (Trigger olarak ayarlı)
+    private void OnTriggerStay(Collider other)
+    {
+        // Maske takılı DEĞİLSE veya cooldown varsa veya zaten hazırlanılıyorsa işlem yapma
+        // Önemli Düzeltme: Maske takılıyken tetiklenmeli, bu yüzden !isAttached kontrolü KALDIRILDI
+        if (attachCooldown > 0f || isPreparingToDetach) return;
+
+        // Maske takılı değilse ve bu metod tetiklenirse, ilgilenmiyoruz. Sadece takılıykenki çıkarmayla ilgiliyiz.
+        if (!isAttached) return;
+
+        // Çarpan obje elin collider'ı mı?
+        if (other.CompareTag(handColliderTag))
+        {
+            // Hangi elin temas ettiğini bul (Temas eden collider'ın transform'unu kullanacağız)
+            Transform contactingHandTransform = other.transform;
+
+            // Doğru kontrolcünün grip tuşuna basılı mı?
+            bool isDetachButtonPressed = false;
+            // Sağ elin kontrolcüsü ve el collider'ı eşleşiyorsa (ElTrigger, RightController'ın çocuğu ise parent'ını kontrol et)
+            if (detachController == OVRInput.Controller.RHand && rightHandInteractorGameObject != null && contactingHandTransform.parent == rightHandInteractorGameObject.transform)
             {
-                // Aktif Interactor'ın transform'unu al (elin pozisyonu için)
-                Transform activeInteractorTransform = null;
-                if (detachController == OVRInput.Controller.RHand && rightHandInteractorObject != null)
-                {
-                    activeInteractorTransform = rightHandInteractorObject.transform;
-                }
-                else if (detachController == OVRInput.Controller.LHand && leftHandInteractorObject != null)
-                {
-                    activeInteractorTransform = leftHandInteractorObject.transform;
-                }
-
-                if (activeInteractorTransform != null)
-                {
-                    // El ile maske arasındaki mesafeyi hesapla
-                    float distanceHandToMask = Vector3.Distance(transform.position, activeInteractorTransform.position);
-                    Debug.Log($"Update: El ile maske arası mesafe: {distanceHandToMask:F2}m. Eşik: {detachProximityThreshold:F2}m.");
-
-                    // Eğer el maskeye yeterince yakınsa
-                    if (distanceHandToMask <= detachProximityThreshold)
-                    {
-                        // Maskeyi çıkarmak için ön hazırlık yap (görünür yap, tutulabilir yap)
-                        PrepareToDetach();
-                    }
-                    else
-                    {
-                        Debug.Log("Update: El maskeye yeterince yakın değil. Çıkarma ön hazırlığı tetiklenmedi.");
-                        // Eğer el uzaklaştıysa ve ön hazırlık yapılıyorsa, durumu sıfırla
-                        if (isPreparingToDetach)
-                        {
-                            ResetDetachPreparation();
-                        }
-                    }
-                }
-                else
-                {
-                    Debug.LogWarning("Update: Detach işlemi için atanmış Interactor Object bulunamadı veya yanlış kontrolcü seçildi.");
-                }
+                isDetachButtonPressed = OVRInput.Get(detachButton, OVRInput.Controller.RTouch);
             }
-            else // Eğer detach butonu basılı değilse
+            // Sol elin kontrolcüsü ve el collider'ı eşleşiyorsa (ElTrigger, LeftController'ın çocuğu ise parent'ını kontrol et)
+            else if (detachController == OVRInput.Controller.LHand && leftHandInteractorGameObject != null && contactingHandTransform.parent == leftHandInteractorGameObject.transform)
             {
-                // Eğer ön hazırlık yapılıyorsa ama buton bırakıldıysa, durumu sıfırla
+                isDetachButtonPressed = OVRInput.Get(detachButton, OVRInput.Controller.LTouch);
+            }
+
+            if (isDetachButtonPressed)
+            {
+                Debug.Log($"OnTriggerStay: El ({other.gameObject.name}) maskeye temas ediyor ve çıkarma butonu ({detachButton}) basılı. PrepareToDetach çağrılıyor.");
+                PrepareToDetach(); // Çıkarma ön hazırlığını yap
+            }
+            else
+            {
+                // Eğer el temas ediyorsa ama buton basılı değilse, ve ön hazırlık yapılıyorsa durumu sıfırla
                 if (isPreparingToDetach)
                 {
+                    Debug.Log("OnTriggerStay: Buton basılı değilken el temasta, ön hazırlık sıfırlanıyor.");
                     ResetDetachPreparation();
                 }
             }
-
-            // Maske takılıysa VE çıkarma için ön hazırlık yapılıyorsa VE maske gerçekten tutulduysa
-            // grabbableComponent.IsGrabbed yerine grabbableComponent.SelectingPointsCount > 0 kullanıldı
-            if (isPreparingToDetach && grabbableComponent != null && grabbableComponent.SelectingPointsCount > 0)
+        }
+        else
+        {
+            // Eğer temas eden obje el collider'ı değilse ve ön hazırlık yapılıyorsa (yanlışlıkla tetiklendiyse), durumu sıfırla
+            if (isPreparingToDetach)
             {
-                Debug.Log("Update: Maske ön hazırlık durumunda ve Interactor tarafından tutuldu. Tam çıkarma işlemi başlatılıyor.");
-                CompleteDetach(); // Tam çıkarma işlemini yap
+                Debug.LogWarning($"OnTriggerStay: Temas eden obje '{other.gameObject.name}' el collider'ı değil. Ön hazırlık sıfırlanıyor.");
+                ResetDetachPreparation();
             }
         }
     }
+
+    // El collider'ı maskeden ayrıldığında (buton basılı olmasa bile)
+    private void OnTriggerExit(Collider other)
+    {
+        if (other.CompareTag(handColliderTag))
+        {
+            Debug.Log($"OnTriggerExit: El ({other.gameObject.name}) maskeden ayrıldı.");
+            if (isPreparingToDetach)
+            {
+                // Eğer el temasını kaybederse, ön hazırlık durumunu sıfırla
+                Debug.Log("OnTriggerExit: El teması kesildi, ön hazırlık sıfırlanıyor.");
+                ResetDetachPreparation();
+            }
+        }
+    }
+
 
     private void AttachMask()
     {
@@ -201,7 +217,7 @@ public class MaskAttachDetector : MonoBehaviour
         Debug.Log("AttachMask: Maske başarıyla takıldı.");
     }
 
-    // YENİ METOT: Çıkarma için ön hazırlık yapar (görünür ve tutulabilir hale getirir)
+    // Çıkarma için ön hazırlık yapar (görünür ve tutulabilir hale getirir)
     private void PrepareToDetach()
     {
         // Zaten hazırlanılıyorsa veya takılı değilse işlem yapma
@@ -228,12 +244,12 @@ public class MaskAttachDetector : MonoBehaviour
         // Işık da hala karartılmış kalacak.
     }
 
-    // YENİ METOT: Çıkarma ön hazırlığı durumunu sıfırlar
+    // Çıkarma ön hazırlığı durumunu sıfırlar
     private void ResetDetachPreparation()
     {
         if (!isPreparingToDetach) return;
 
-        Debug.Log("ResetDetachPreparation: Çıırma ön hazırlığı sıfırlandı.");
+        Debug.Log("ResetDetachPreparation: Çıkarma ön hazırlığı sıfırlandı.");
         isPreparingToDetach = false;
 
         // Maskenin görselini tekrar gizle
@@ -253,7 +269,7 @@ public class MaskAttachDetector : MonoBehaviour
     }
 
 
-    // ESKİ DetachMask() metodunun yeni adı: Tam çıkarma işlemini yapar
+    // Tam çıkarma işlemini yapar
     private void CompleteDetach()
     {
         Debug.Log("CompleteDetach: Maske tamamen çıkarılıyor.");
@@ -263,8 +279,6 @@ public class MaskAttachDetector : MonoBehaviour
 
         // Maske kafa hedefinden ayrılır (parent kaldırılır)
         Transform originalParent = transform.parent; // Mevcut parent'ı kaydet
-        // Transform.SetParent(Transform parent) metodunda ikinci argüman (worldPositionStays) varsayılan olarak true'dur.
-        // Explicit olarak belirtmeye gerek yok, hata veriyorsa kaldırılır.
         transform.SetParent(null); // Parent'ı ayır
         Debug.Log($"CompleteDetach: Maske kafa hedefinden ayrıldı. Önceki parent: {(originalParent != null ? originalParent.name : "Yok")}");
 
