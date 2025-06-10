@@ -89,6 +89,13 @@ public class MaskAttachDetector : MonoBehaviour
             Debug.Log("Update: Maske ön hazırlık durumunda ve Interactor tarafından tutuldu. Tam çıkarma işlemi başlatılıyor.");
             CompleteDetach(); // Tam çıkarma işlemini yap
         }
+        if (!isAttached && directionalLight != null &&
+    (directionalLight.color != originalLightColor || directionalLight.intensity != originalIntensity))
+        {
+            directionalLight.color = originalLightColor;
+            directionalLight.intensity = originalIntensity;
+            Debug.Log("Update: Maske takılı değil, ışık eski haline döndürüldü.");
+        }
     }
 
     // El collider'ı maskeye temas ettiğinde (Trigger olarak ayarlı)
@@ -120,10 +127,28 @@ public class MaskAttachDetector : MonoBehaviour
                 isDetachButtonPressed = OVRInput.Get(detachButton, OVRInput.Controller.LTouch);
             }
 
-            if (isDetachButtonPressed)
+            if (isAttached)
             {
-                Debug.Log($"OnTriggerStay: El ({other.gameObject.name}) maskeye temas ediyor ve çıkarma butonu ({detachButton}) basılı. PrepareToDetach çağrılıyor.");
-                PrepareToDetach(); // Çıkarma ön hazırlığını yap
+                if (maskModel != null && !maskModel.activeSelf)
+                {
+                    maskModel.SetActive(true);
+                    Debug.Log("El maskeye temas etti, maske modeli görünür yapıldı.");
+                    transform.SetParent(null); // Kafadan ayır
+                    Rigidbody rb = GetComponent<Rigidbody>();
+                    if (rb != null)
+                    {
+                        rb.isKinematic = false;
+                        rb.useGravity = true;
+                    }
+                    isAttached = false;
+                }
+
+                // Butona basılmışsa çıkarma başlat
+                if (isDetachButtonPressed)
+                {
+                    Debug.Log($"OnTriggerStay: El ({other.gameObject.name}) maskeye temas ediyor ve çıkarma butonu ({detachButton}) basılı. PrepareToDetach çağrılıyor.");
+                    PrepareToDetach(); // Çıkarma ön hazırlığını yap
+                }
             }
             else
             {
