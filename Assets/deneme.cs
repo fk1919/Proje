@@ -7,7 +7,7 @@ public class deneme : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        
+        // aaaaa
     }
 
     // Update is called once per frame
