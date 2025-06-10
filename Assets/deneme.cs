@@ -8,6 +8,7 @@ public class deneme : MonoBehaviour
     void Start()
     {
         // aaaaa
+        //1111
     }
 
     // Update is called once per frame
