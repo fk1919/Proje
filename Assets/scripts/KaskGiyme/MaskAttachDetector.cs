@@ -96,6 +96,16 @@ public class MaskAttachDetector : MonoBehaviour
             directionalLight.intensity = originalIntensity;
             Debug.Log("Update: Maske takılı değil, ışık eski haline döndürüldü.");
         }
+        if (!isAttached)
+        {
+            Rigidbody rb = GetComponent<Rigidbody>();
+            if (rb != null && rb.isKinematic)
+            {
+                rb.isKinematic = false;
+                rb.useGravity = true;
+                Debug.Log("Update Güvencesi: Maske takılı değil ama kinematic kaldı. Düzeltildi.");
+            }
+        }
     }
 
     // El collider'ı maskeye temas ettiğinde (Trigger olarak ayarlı)
@@ -184,6 +194,16 @@ public class MaskAttachDetector : MonoBehaviour
                 ResetDetachPreparation();
             }
         }
+        if (!isAttached)
+        {
+            Rigidbody rb = GetComponent<Rigidbody>();
+            if (rb != null)
+            {
+                rb.isKinematic = false;
+                rb.useGravity = true;
+                Debug.Log("OnTriggerExit: Yedek olarak Rigidbody fiziksel hale getirildi.");
+            }
+        }
     }
 
 
@@ -263,6 +283,15 @@ public class MaskAttachDetector : MonoBehaviour
         {
             grabbableComponent.enabled = true;
             Debug.Log("PrepareToDetach: Grabbable aktif edildi, maske tutulabilir.");
+        }
+        Rigidbody rb = GetComponent<Rigidbody>();
+        if (rb != null)
+        {
+            rb.isKinematic = true;
+            rb.useGravity = false;
+            rb.velocity = Vector3.zero;
+            rb.angularVelocity = Vector3.zero;
+            Debug.Log("PrepareToDetach: Rigidbody geçici olarak donduruldu.");
         }
 
         // Maske hala kinematic ve parent'lı kalacak, yere düşmeyecek.
