@@ -26,18 +26,23 @@ public class MakineAcma : MonoBehaviour
 
     // ▼▼▼ Ses ile İlgili Değişkenler ▼▼▼
     [Header("— Ses Ayarları —")]
-    public AudioSource makinaAudioSource;    // Inspector’dan sürükle-at yapacağınız AudioSource bileşeni
-    public AudioClip makinaCalismaSesi;      // Inspector’dan atayacağınız, looplu oynayacak ses dosyası
+    public AudioSource makinaAudioSource;
+    public AudioClip makinaCalismaSesi;
 
     // ▼▼▼ Proximity (Yakınlık) Kontrolü ▼▼▼
     [Header("— Proximity Ayarları —")]
-    public Transform KNOPKA1_LOW;           // Etkileşim için kontrol edeceğimiz obje
-    public Transform rightHandAnchor;       // Oyuncunun sağ elinin Transform’u (OVR RightHandAnchor)
-    public float interactionDistance = 0.5f; // Kaç metre yaklaşıldığında A tuşu aktif olsun
+    public Transform KNOPKA1_LOW;
+    public Transform rightHandAnchor;
+    public float interactionDistance = 0.5f;
+
+    // ▼▼▼ Fan Dönme Ayarları ▼▼▼
+    [Header("— Fan Ayarları —")]
+    public Transform fanTransform;           // Dönecek fan objesi
+    public float fanRotationSpeed = 360f;    // Derece/sn cinsinden dönüş hızı
+    public Transform fanPivot;               // Fanın döneceği merkez noktası
 
     void Start()
     {
-        // ► Tetik Görselinin (triggerVisual) başlangıç pozisyon/rotasyon bilgilerini alıyoruz
         if (triggerVisual != null)
         {
             initialLocalPosition = triggerVisual.localPosition;
@@ -48,7 +53,6 @@ public class MakineAcma : MonoBehaviour
                 originalColor = triggerRenderer.material.color;
         }
 
-        // ► Eğer Inspector’dan AudioSource atamadıysanız, aynı GameObject üzerindeki AudioSource bileşenini otomatik al
         if (makinaAudioSource == null)
         {
             makinaAudioSource = GetComponent<AudioSource>();
@@ -57,74 +61,60 @@ public class MakineAcma : MonoBehaviour
 
     void Update()
     {
-        // Eğer triggerVisual tanımlı değilse hiçbir işlem yapma
         if (triggerVisual == null) return;
 
-        // ► Sağ el Transform’u tanımlı mı kontrol et
         if (rightHandAnchor == null || KNOPKA1_LOW == null)
         {
             Debug.LogWarning("MakineAcma: KNOPKA1_LOW veya rightHandAnchor atanmamış!");
             return;
         }
 
-        // ► A tuşuna (Button.One) basılıp basılmadığını oku
         bool isAButtonPressedNow = OVRInput.Get(OVRInput.Button.One, OVRInput.Controller.RTouch);
-
-        // ► Sağ el ile KNOPKA1_LOW objesi arasındaki mesafeyi hesapla
         float distanceToKnopka = Vector3.Distance(rightHandAnchor.position, KNOPKA1_LOW.position);
         bool isNearKnopka = distanceToKnopka <= interactionDistance;
 
-        // — Eğer yeterince yakınsa A tuşu işlenebilir; uzakken hiçbir şey yapma
         if (isNearKnopka)
         {
-            // Yeni bir tıklama (false→true) algılandı mı?
             if (isAButtonPressedNow && !wasButtonPressedLastFrame)
             {
-                // ► isPressed durumunu tersine çevir (false→true aç, true→false kapat)
                 isPressed = !isPressed;
-                // Görsel alanların gösterim durumunu tersine çevir
                 showZARYDKAFields = !showZARYDKAFields;
 
-                // ► Tetik görselinin rengini değiştir
                 if (triggerRenderer != null)
-                {
                     triggerRenderer.material.color = isPressed ? pressedColor : originalColor;
-                }
 
-                // ▼--------- SES OYNATMA / DURDURMA BÖLÜMÜ ---------▼
                 if (isPressed)
                 {
-                    // Makine açıldıysa:
                     if (makinaAudioSource != null && makinaCalismaSesi != null)
                     {
                         makinaAudioSource.clip = makinaCalismaSesi;
-                        makinaAudioSource.loop = true;   // Inspector’da da işaretli olabilir, burada garanti
+                        makinaAudioSource.loop = true;
                         makinaAudioSource.Play();
                     }
                 }
-                else
+                else if (makinaAudioSource != null)
                 {
-                    // Makine kapandıysa:
-                    if (makinaAudioSource != null)
-                    {
-                        makinaAudioSource.Stop();
-                    }
+                    makinaAudioSource.Stop();
                 }
-                // ▲----------------------------------------------▲
             }
         }
-        // — Eğer uzakken A tuşa basılsa bile hiçbir ek işlem yapmayacağız (butonun durumunu değiştirmeyeceğiz)
 
-        // ► Tetik görselinin pozisyon/rotasyonunu, her durumda isPressed değerine göre güncelle
+        // Tetik görselinin güncellenmesi
         triggerVisual.localPosition = isPressed ? pressedLocalPosition : initialLocalPosition;
         triggerVisual.localRotation = isPressed ? pressedLocalRotation : initialLocalRotation;
 
-        // ► ZARYDKA nesnelerini aktif/pasif yap
+        // ZARYDKA nesneleri
         if (ZARYDKA4 != null) ZARYDKA4.SetActive(showZARYDKAFields);
         if (ZARYDKA5 != null) ZARYDKA5.SetActive(showZARYDKAFields);
         if (ZARYDKA6 != null) ZARYDKA6.SetActive(showZARYDKAFields);
 
-        // ► Bir sonraki karede, önceki basılı durumu karşılaştırabilmek için flag’i güncelle
+        // Fanı belirli bir merkez noktası etrafında Z ekseninde döndür (makine çalışırken)
+        if (isPressed && fanTransform != null && fanPivot != null)
+        {
+            // fanPivot.position etrafında döner
+            fanTransform.RotateAround(fanPivot.position, Vector3.forward, fanRotationSpeed * Time.deltaTime);
+        }
+
         wasButtonPressedLastFrame = isAButtonPressedNow;
     }
 }

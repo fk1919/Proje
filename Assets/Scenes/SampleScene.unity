@@ -1321,6 +1321,12 @@ Transform:
   - {fileID: 1162015659}
   m_Father: {fileID: 744203422}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!4 &40767487 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: -3283199736591396593, guid: c84e3c04cdfa1f04ba66c665e8fc4158,
+    type: 3}
+  m_PrefabInstance: {fileID: 1742641206}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &42308643
 GameObject:
   m_ObjectHideFlags: 0
@@ -3293,6 +3299,12 @@ Transform:
   m_Children: []
   m_Father: {fileID: 1554820186}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!4 &147481454 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: -8938199612342518221, guid: c84e3c04cdfa1f04ba66c665e8fc4158,
+    type: 3}
+  m_PrefabInstance: {fileID: 1742641206}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &148134684
 GameObject:
   m_ObjectHideFlags: 0
@@ -40522,7 +40534,7 @@ PrefabInstance:
     - target: {fileID: -8679921383154817045, guid: c84e3c04cdfa1f04ba66c665e8fc4158,
         type: 3}
       propertyPath: m_LocalPosition.x
-      value: 6.239
+      value: 7.094
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: c84e3c04cdfa1f04ba66c665e8fc4158,
         type: 3}
@@ -40537,7 +40549,7 @@ PrefabInstance:
     - target: {fileID: -8679921383154817045, guid: c84e3c04cdfa1f04ba66c665e8fc4158,
         type: 3}
       propertyPath: m_LocalRotation.w
-      value: -0.3420201
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: c84e3c04cdfa1f04ba66c665e8fc4158,
         type: 3}
@@ -40547,12 +40559,12 @@ PrefabInstance:
     - target: {fileID: -8679921383154817045, guid: c84e3c04cdfa1f04ba66c665e8fc4158,
         type: 3}
       propertyPath: m_LocalRotation.y
-      value: 0.9396927
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: c84e3c04cdfa1f04ba66c665e8fc4158,
         type: 3}
       propertyPath: m_LocalRotation.z
-      value: -0
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: c84e3c04cdfa1f04ba66c665e8fc4158,
         type: 3}
@@ -40562,7 +40574,7 @@ PrefabInstance:
     - target: {fileID: -8679921383154817045, guid: c84e3c04cdfa1f04ba66c665e8fc4158,
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.y
-      value: 220
+      value: 180
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: c84e3c04cdfa1f04ba66c665e8fc4158,
         type: 3}
@@ -40902,6 +40914,9 @@ MonoBehaviour:
   KNOPKA1_LOW: {fileID: 639470588}
   rightHandAnchor: {fileID: 2012981872}
   interactionDistance: 0.1
+  fanTransform: {fileID: 147481454}
+  fanRotationSpeed: 180
+  fanPivot: {fileID: 40767487}
 --- !u!82 &1742641213
 AudioSource:
   m_ObjectHideFlags: 0
