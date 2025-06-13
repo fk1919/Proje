@@ -11003,7 +11003,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   maskModel: {fileID: 274559125}
   headTarget: {fileID: 1226675642}
-  attachProximityThreshold: 0.2
+  attachProximityThreshold: 0.175
   directionalLight: {fileID: 410087040}
   attachedLightColor: {r: 0.5, g: 0.5, b: 0.5, a: 1}
   attachedIntensity: 0.95
