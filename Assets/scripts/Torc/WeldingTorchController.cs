@@ -7,6 +7,7 @@ public class WeldingTorchController : MonoBehaviour
     public Light flameLight;
     public AudioSource weldingSound;
     public OVRInput.RawButton weldingButton = OVRInput.RawButton.RIndexTrigger;
+    public bool isHeld = false;
 
     [Header("Settings")]
     public float targetOnIntensity = 3f;  // Alev aktifken ulaþýlacak ýþýk seviyesi
@@ -41,8 +42,15 @@ public class WeldingTorchController : MonoBehaviour
 
     void Update()
     {
-        if (OVRInput.GetDown(weldingButton)) StartWelding();
-        if (OVRInput.GetUp(weldingButton)) StopWelding();
+        if (isHeld)
+        {
+            if (OVRInput.GetDown(weldingButton)) StartWelding();
+            if (OVRInput.GetUp(weldingButton)) StopWelding();
+        }
+        else
+        {
+            StopWelding(); // Torç elde deðilse güvenlik için alevi kapat
+        }
 
         if (flameLight != null)
         {
