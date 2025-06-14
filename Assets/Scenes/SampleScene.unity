@@ -10914,7 +10914,7 @@ Rigidbody:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 527767555}
   serializedVersion: 4
-  m_Mass: 1
+  m_Mass: 7
   m_Drag: 0
   m_AngularDrag: 0.05
   m_CenterOfMass: {x: 0, y: 0, z: 0}
@@ -10952,8 +10952,8 @@ BoxCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
-  m_Size: {x: 2, y: 2, z: 3}
-  m_Center: {x: 0, y: 0, z: 0}
+  m_Size: {x: 2.3, y: 1.85, z: 2.3}
+  m_Center: {x: 0, y: 0, z: -0.35}
 --- !u!114 &527767560
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -11003,7 +11003,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   maskModel: {fileID: 274559125}
   headTarget: {fileID: 1226675642}
-  attachProximityThreshold: 0.175
+  attachProximityThreshold: 0.15
   directionalLight: {fileID: 410087040}
   attachedLightColor: {r: 0.5, g: 0.5, b: 0.5, a: 1}
   attachedIntensity: 0.95
@@ -17458,6 +17458,7 @@ MonoBehaviour:
   flameLight: {fileID: 0}
   weldingSound: {fileID: 0}
   weldingButton: 67108864
+  isHeld: 0
   targetOnIntensity: 2
 --- !u!1 &609016646
 GameObject:
@@ -23703,17 +23704,17 @@ PrefabInstance:
     - target: {fileID: -8679921383154817045, guid: 6c41da3ea7f85e94fa13125228d388ae,
         type: 3}
       propertyPath: m_LocalPosition.x
-      value: 7.424
+      value: 7.433
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 6c41da3ea7f85e94fa13125228d388ae,
         type: 3}
       propertyPath: m_LocalPosition.y
-      value: 0.783
+      value: 0.7839
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 6c41da3ea7f85e94fa13125228d388ae,
         type: 3}
       propertyPath: m_LocalPosition.z
-      value: 1.222
+      value: 1.2045
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 6c41da3ea7f85e94fa13125228d388ae,
         type: 3}
@@ -48016,6 +48017,7 @@ MonoBehaviour:
   flameLight: {fileID: 607137749}
   weldingSound: {fileID: 607137750}
   weldingButton: 67108864
+  isHeld: 0
   targetOnIntensity: 2
 --- !u!114 &2025994332
 MonoBehaviour:
@@ -48066,7 +48068,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   rightHandAnchor: {fileID: 2012981872}
-  pickupDistance: 0.2
+  pickupDistance: 0.08
   rotationOffsetEuler: {x: 60, y: 0, z: 180}
 --- !u!54 &2025994335
 Rigidbody:
